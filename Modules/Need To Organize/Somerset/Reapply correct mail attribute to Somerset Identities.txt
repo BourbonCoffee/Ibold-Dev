@@ -1,0 +1,13 @@
+$users = Import-Csv -Path "C:\temp\UPNs.csv"
+
+foreach ($user in $users) {
+    $samAccountName = $user.samaccountname
+    $proxyAddress = $user.upn
+
+    try {
+        Set-ADUser -Identity $samAccountName -EmailAddress $proxyAddress
+        Write-Host "Successfully added $proxyAddress to $samAccountName"
+    } catch {
+        Write-Host "Failed to add $proxyAddress to $samAccountName. Error: $_"
+    }
+}

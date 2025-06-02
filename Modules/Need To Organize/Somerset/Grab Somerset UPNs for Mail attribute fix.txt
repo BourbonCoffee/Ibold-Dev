@@ -1,0 +1,24 @@
+$users = Import-Csv -Path "C:\Users\cibolda\Desktop\SomersetUsers.csv"
+
+$results = @()
+
+
+foreach ($user in $users) {
+    $samAccountName = $user.samaccountname
+
+    try {
+        $upn = (Get-ADUser -Identity $samAccountName -Properties UserPrincipalName).UserPrincipalName
+        $results += [PSCustomObject]@{
+            samaccountname = $samAccountName
+            upn = $upn
+        }
+
+        Write-Host "Successfully retrieved UPN for $samAccountName"
+    } catch {
+        Write-Host "Failed to retrieve UPN for $samAccountName. Error: $_"
+    }
+}
+
+$results | Export-Csv -Path "C:\temp\UPNs.csv" -NoTypeInformation
+
+Write-Host "Results have been exported to C:\temp\output.csv"
