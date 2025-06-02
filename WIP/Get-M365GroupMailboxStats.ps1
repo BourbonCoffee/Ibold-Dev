@@ -1,0 +1,1 @@
+Get-UnifiedGroup | Select-Object DisplayName, Recipient*, itemcount, @{n = "Size"; e = { (Get-MailboxStatistics $_.Identity).TotalItemSize } } | Export-Csv $env:OneDrive\desktop\Get-M365UnifiedGroupMailboxes.csv -NoTypeInformation
